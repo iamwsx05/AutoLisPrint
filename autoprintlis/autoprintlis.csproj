@@ -146,6 +146,7 @@
     <Compile Include="clsPrintToolFactory.cs" />
     <Compile Include="clsUnifyReportPrint.cs" />
     <Compile Include="entity.cs" />
+    <Compile Include="EntityAppUnit.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

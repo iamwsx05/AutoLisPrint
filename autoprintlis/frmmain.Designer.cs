@@ -271,7 +271,7 @@ namespace autoprintlis
             this.panelControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelControl1.Location = new System.Drawing.Point(0, 0);
             this.panelControl1.Name = "panelControl1";
-            this.panelControl1.Size = new System.Drawing.Size(1383, 788);
+            this.panelControl1.Size = new System.Drawing.Size(1383, 805);
             this.panelControl1.TabIndex = 13;
             // 
             // panelControl4
@@ -289,7 +289,7 @@ namespace autoprintlis
             this.panelControl4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelControl4.Location = new System.Drawing.Point(592, 136);
             this.panelControl4.Name = "panelControl4";
-            this.panelControl4.Size = new System.Drawing.Size(789, 650);
+            this.panelControl4.Size = new System.Drawing.Size(789, 667);
             this.panelControl4.TabIndex = 17;
             // 
             // lblComplete
@@ -387,7 +387,7 @@ namespace autoprintlis
             this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox2.Location = new System.Drawing.Point(2, 2);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(785, 646);
+            this.pictureBox2.Size = new System.Drawing.Size(785, 663);
             this.pictureBox2.TabIndex = 1;
             this.pictureBox2.TabStop = false;
             // 
@@ -398,7 +398,7 @@ namespace autoprintlis
             this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser.Name = "webBrowser";
             this.webBrowser.ScrollBarsEnabled = false;
-            this.webBrowser.Size = new System.Drawing.Size(785, 646);
+            this.webBrowser.Size = new System.Drawing.Size(785, 663);
             this.webBrowser.TabIndex = 0;
             this.webBrowser.Visible = false;
             // 
@@ -422,7 +422,7 @@ namespace autoprintlis
             this.panelControl3.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelControl3.Location = new System.Drawing.Point(2, 136);
             this.panelControl3.Name = "panelControl3";
-            this.panelControl3.Size = new System.Drawing.Size(590, 650);
+            this.panelControl3.Size = new System.Drawing.Size(590, 667);
             this.panelControl3.TabIndex = 16;
             // 
             // labelControl2
@@ -523,7 +523,7 @@ namespace autoprintlis
             // 
             this.barDockControlBottom.CausesValidation = false;
             this.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.barDockControlBottom.Location = new System.Drawing.Point(0, 788);
+            this.barDockControlBottom.Location = new System.Drawing.Point(0, 805);
             this.barDockControlBottom.Size = new System.Drawing.Size(1383, 0);
             // 
             // barDockControlLeft
@@ -531,14 +531,14 @@ namespace autoprintlis
             this.barDockControlLeft.CausesValidation = false;
             this.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.barDockControlLeft.Location = new System.Drawing.Point(0, 0);
-            this.barDockControlLeft.Size = new System.Drawing.Size(0, 788);
+            this.barDockControlLeft.Size = new System.Drawing.Size(0, 805);
             // 
             // barDockControlRight
             // 
             this.barDockControlRight.CausesValidation = false;
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
             this.barDockControlRight.Location = new System.Drawing.Point(1383, 0);
-            this.barDockControlRight.Size = new System.Drawing.Size(0, 788);
+            this.barDockControlRight.Size = new System.Drawing.Size(0, 805);
             // 
             // timerFocus
             // 
@@ -562,7 +562,7 @@ namespace autoprintlis
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1383, 788);
+            this.ClientSize = new System.Drawing.Size(1383, 805);
             this.Controls.Add(this.panelControl1);
             this.Controls.Add(this.barDockControlLeft);
             this.Controls.Add(this.barDockControlRight);

@@ -72,6 +72,9 @@ namespace autoprintlis
         private Image objImage;
         public bool IsDocked { get; set; }
 
+        private List<string> lstAppUnitID{ get; set; }
+        private EntityAppUnit CurrAppUnit{ get; set; }
+
         public clsUnifyReportPrint()
         {
             string filename = Application.StartupPath + "\\Picture\\茶山log.bmp";
@@ -96,7 +99,55 @@ namespace autoprintlis
                 ExceptionLog.OutPutException("clsUnifyReportPrint-->" + ex);
             }
         }
-
+        private string GetAllergenRemarkInfo(string appId)
+        {
+            string result;
+            try
+            {
+                if (this.lstAppUnitID == null || this.lstAppUnitID.Count == 0)
+                {
+                    this.CurrAppUnit = null;
+                    result = "";
+                }
+                else
+                {
+                    if (this.CurrAppUnit != null && this.CurrAppUnit.appId == appId)
+                    {
+                        result = this.CurrAppUnit.remarkInfo;
+                    }
+                    else
+                    {
+                        this.CurrAppUnit = null;
+                        lisprintBiz biz = new lisprintBiz();
+                        List<string> appUnitIdByAppId = biz.GetAppUnitIdByAppId(appId);
+                        if (appUnitIdByAppId != null && appUnitIdByAppId.Count > 0)
+                        {
+                            foreach (string current in appUnitIdByAppId)
+                            {
+                                if (this.lstAppUnitID.IndexOf(current) >= 0)
+                                {
+                                    this.CurrAppUnit = new EntityAppUnit();
+                                    this.CurrAppUnit.appId = appId;
+                                    string text = string.Empty + Environment.NewLine;
+                                    text = text + "0:无[0.00-0.34 IU/ml]\t\t\t\t1:低[0.35-0.69 IU/ml]\t\t2:增加[0.70-3.49 IU/ml]" + Environment.NewLine;
+                                    text = text + "3:显著增加[3.50-17.49 IU/ml]\t\t4:高[17.5-49.9 IU/ml]\t\t5:较高[50.0-100.0 IU/ml]" + Environment.NewLine;
+                                    text += "6:极高[>100 IU/ml]";
+                                    this.CurrAppUnit.remarkInfo = text;
+                                    result = this.CurrAppUnit.remarkInfo;
+                                    return result;
+                                }
+                            }
+                        }
+                        result = "";
+                    }
+                }
+            }
+            catch
+            {
+                result = "";
+            }
+            return result;
+        }
         private void m_mthInitalPrintTool(PrintDocument p_printDoc)
         {
             Rectangle bounds = p_printDoc.DefaultPageSettings.Bounds;
@@ -121,8 +172,6 @@ namespace autoprintlis
             this.BillStyle = biz.m_intGetSysParm("4010");
 
         }
-
-
         private Image m_imgDrawGraphic(byte[] p_bytGraph, string p_strImageFormat)
         {
             Image image = null;
@@ -263,20 +312,20 @@ namespace autoprintlis
         }
         private float m_fltPrintSummary(float p_fltX, float p_fltY, float p_fltPrintWidth)
         {
+            string summaryStr = this.m_dtbSample.Rows[0]["SUMMARY_VCHR"].ToString().Trim() + this.GetAllergenRemarkInfo(this.m_dtbSample.Rows[0]["application_id_chr"].ToString());
             float result;
-            if (!this.m_blnSummaryEmptyVisible && this.m_dtbSample.Rows[0]["SUMMARY_VCHR"].ToString().Trim() == "")
+            if (!this.m_blnSummaryEmptyVisible && string.IsNullOrEmpty(summaryStr))
             {
                 result = p_fltY;
             }
             else
             {
                 float num = p_fltY + 10f;
-                string p_strContent = this.m_dtbSample.Rows[0]["SUMMARY_VCHR"].ToString().Trim();
                 this.m_printMethodTool.m_mthDrawString(this.m_strSummary, this.m_fntSmallBold, p_fltX, num);
                 num += (float)this.m_fntSmallBold.Height + this.m_fltTitleSpace;
-                SizeF sizeF = this.m_rectGetPrintStringRectangle(this.m_fntSmallBold, this.m_fntSmallNotBold, p_strContent, p_fltPrintWidth, this.m_fltTitleSpace, this.m_fltItemSpace);
+                SizeF sizeF = this.m_rectGetPrintStringRectangle(this.m_fntSmallBold, this.m_fntSmallNotBold, summaryStr, p_fltPrintWidth, this.m_fltTitleSpace, this.m_fltItemSpace);
                 Rectangle rectPrint = new Rectangle((int)p_fltX, (int)num, (int)sizeF.Width, (int)sizeF.Height);
-                new clsPrintRichTextContext(Color.Black, this.m_fntSmallNotBold).m_mthPrintText(this.m_dtbSample.Rows[0]["SUMMARY_VCHR"].ToString().Trim(), this.m_dtbSample.Rows[0]["XML_SUMMARY_VCHR"].ToString().Trim(), this.m_fntSmallNotBold, Color.Black, rectPrint, this.m_printMethodTool.m_printEventArg.Graphics);
+                new clsPrintRichTextContext(Color.Black, this.m_fntSmallNotBold).m_mthPrintText(summaryStr, this.m_dtbSample.Rows[0]["XML_SUMMARY_VCHR"].ToString().Trim(), this.m_fntSmallNotBold, Color.Black, rectPrint, this.m_printMethodTool.m_printEventArg.Graphics);
                 num += (float)rectPrint.Height;
                 result = num;
             }
@@ -496,7 +545,7 @@ namespace autoprintlis
         }
         private void m_mthPrintDetail()
         {
-            string p_strContent = this.m_dtbSample.Rows[0]["SUMMARY_VCHR"].ToString().Trim();
+            string p_strContent = this.m_dtbSample.Rows[0]["SUMMARY_VCHR"].ToString().Trim() + this.GetAllergenRemarkInfo(this.m_dtbSample.Rows[0]["application_id_chr"].ToString());
             SizeF sizeF = this.m_rectGetPrintStringRectangle(this.m_fntSmallBold, this.m_fntSmallNotBold, p_strContent, this.m_fltPrintWidth, this.m_fltTitleSpace, this.m_fltItemSpace);
             if (this.m_objPrintPage == null)
             {
@@ -537,7 +586,7 @@ namespace autoprintlis
         }
         private void m_mthPrintDetail_DGCS()
         {
-            string p_strContent = this.m_dtbSample.Rows[0]["summary_vchr"].ToString().Trim();
+            string p_strContent = this.m_dtbSample.Rows[0]["summary_vchr"].ToString().Trim() + this.GetAllergenRemarkInfo(this.m_dtbSample.Rows[0]["application_id_chr"].ToString());
             SizeF sizeF = this.m_rectGetPrintStringRectangle(this.m_fntSmallBold, this.m_fntSmallNotBold, p_strContent, this.m_fltPrintWidth, this.m_fltTitleSpace, this.m_fltItemSpace);
             if (this.m_objPrintPage == null)
             {
@@ -1084,7 +1133,7 @@ namespace autoprintlis
                     }
                 }
             }
-            string p_strContent = this.m_dtbSample.Rows[0]["summary_vchr"].ToString().Trim();
+            string p_strContent = this.m_dtbSample.Rows[0]["summary_vchr"].ToString().Trim() + this.GetAllergenRemarkInfo(this.m_dtbSample.Rows[0]["application_id_chr"].ToString());
             SizeF sizeF = this.m_rectGetPrintStringRectangle(this.m_fntSmallBold, this.m_fntSmallNotBold, p_strContent, this.m_fltPrintWidth, this.m_fltTitleSpace, this.m_fltItemSpace);
             if (sizeF.Height > 0f && sizeF.Height > p_fltMaxHeight - num10)
             {
@@ -1195,8 +1244,16 @@ namespace autoprintlis
         }
         private void m_mthPrint()
         {
-            this.m_mthPrintBseInfo();
             lisprintBiz biz = new lisprintBiz();
+            string parmValue = biz.m_strGetSysparm("7011");
+            if (!string.IsNullOrEmpty(parmValue) && parmValue.Trim() != "")
+            {
+                this.lstAppUnitID = new List<string>();
+                this.lstAppUnitID.AddRange(parmValue.Split(';'));
+            }
+
+            this.m_mthPrintBseInfo();
+            
             string text = biz.m_strGetSysparm("7006");
 
             if (text != null)

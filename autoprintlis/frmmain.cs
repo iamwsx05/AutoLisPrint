@@ -21,9 +21,6 @@ namespace autoprintlis
 {
     public partial class frmmain : frmBase
     {
-        /// <summary>
-        /// frmmain
-        /// </summary>
         public frmmain()
         {
             InitializeComponent();

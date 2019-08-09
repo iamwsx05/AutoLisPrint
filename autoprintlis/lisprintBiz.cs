@@ -561,5 +561,35 @@ namespace autoprintlis
             return name;
         }
 
+        public List<string> GetAppUnitIdByAppId(string applicationId)
+        {
+            string sql = string.Empty;
+            List<string> list = new List<string>();
+            try
+            {
+                SqlHelper svc = new SqlHelper(EnumBiz.onlineDB);
+                sql = @"select a.apply_unit_id_chr
+                                from t_opr_lis_app_apply_unit a
+                                where a.application_id_chr = ?";
+                IDataParameter[] param = null;
+                param = svc.CreateParm(1);
+                param[0].Value = applicationId;
+                DataTable dt = svc.GetDataTable(sql, param);
+
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    foreach (DataRow dataRow in dt.Rows)
+                    {
+                        list.Add(dataRow["apply_unit_id_chr"].ToString());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionLog.OutPutException("GetAppUnitIdByAppId-->" + ex);
+            }
+            return list;
+        }
+
     }
 }
