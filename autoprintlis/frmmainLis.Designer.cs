@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 namespace autoprintlis
 {
-    partial class frmmain
+    partial class frmmainLis
     {
         /// <summary>
         /// Required designer variable.
@@ -30,7 +30,7 @@ namespace autoprintlis
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmmain));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmmainLis));
             this.btn_1 = new DevExpress.XtraEditors.SimpleButton();
             this.btn_2 = new DevExpress.XtraEditors.SimpleButton();
             this.btn_3 = new DevExpress.XtraEditors.SimpleButton();
@@ -48,8 +48,6 @@ namespace autoprintlis
             this.panelControl4 = new DevExpress.XtraEditors.PanelControl();
             this.lblComplete = new DevExpress.XtraEditors.LabelControl();
             this.lblTipNum = new DevExpress.XtraEditors.LabelControl();
-            this.lblIng2 = new DevExpress.XtraEditors.LabelControl();
-            this.lblIngNum = new DevExpress.XtraEditors.LabelControl();
             this.lblTip2 = new DevExpress.XtraEditors.LabelControl();
             this.lblName = new DevExpress.XtraEditors.LabelControl();
             this.lblIng1 = new DevExpress.XtraEditors.LabelControl();
@@ -278,8 +276,6 @@ namespace autoprintlis
             // 
             this.panelControl4.Controls.Add(this.lblComplete);
             this.panelControl4.Controls.Add(this.lblTipNum);
-            this.panelControl4.Controls.Add(this.lblIng2);
-            this.panelControl4.Controls.Add(this.lblIngNum);
             this.panelControl4.Controls.Add(this.lblTip2);
             this.panelControl4.Controls.Add(this.lblName);
             this.panelControl4.Controls.Add(this.lblIng1);
@@ -315,28 +311,6 @@ namespace autoprintlis
             this.lblTipNum.TabIndex = 12;
             this.lblTipNum.Text = "2";
             // 
-            // lblIng2
-            // 
-            this.lblIng2.Appearance.BackColor = System.Drawing.Color.White;
-            this.lblIng2.Appearance.Font = new System.Drawing.Font("Tahoma", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblIng2.Appearance.ForeColor = System.Drawing.Color.Black;
-            this.lblIng2.Location = new System.Drawing.Point(304, 456);
-            this.lblIng2.Name = "lblIng2";
-            this.lblIng2.Size = new System.Drawing.Size(171, 42);
-            this.lblIng2.TabIndex = 11;
-            this.lblIng2.Text = "份报告......";
-            // 
-            // lblIngNum
-            // 
-            this.lblIngNum.Appearance.BackColor = System.Drawing.Color.White;
-            this.lblIngNum.Appearance.Font = new System.Drawing.Font("Tahoma", 42F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblIngNum.Appearance.ForeColor = System.Drawing.Color.Red;
-            this.lblIngNum.Location = new System.Drawing.Point(264, 440);
-            this.lblIngNum.Name = "lblIngNum";
-            this.lblIngNum.Size = new System.Drawing.Size(31, 68);
-            this.lblIngNum.TabIndex = 10;
-            this.lblIngNum.Text = "1";
-            // 
             // lblTip2
             // 
             this.lblTip2.Appearance.BackColor = System.Drawing.Color.White;
@@ -366,9 +340,9 @@ namespace autoprintlis
             this.lblIng1.Appearance.ForeColor = System.Drawing.Color.Black;
             this.lblIng1.Location = new System.Drawing.Point(8, 456);
             this.lblIng1.Name = "lblIng1";
-            this.lblIng1.Size = new System.Drawing.Size(245, 42);
+            this.lblIng1.Size = new System.Drawing.Size(346, 42);
             this.lblIng1.TabIndex = 3;
-            this.lblIng1.Text = "正在为您打印第";
+            this.lblIng1.Text = "正在为您打印报告......";
             // 
             // lblTip1
             // 
@@ -390,6 +364,7 @@ namespace autoprintlis
             this.pictureBox2.Size = new System.Drawing.Size(785, 663);
             this.pictureBox2.TabIndex = 1;
             this.pictureBox2.TabStop = false;
+            this.pictureBox2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Start_MouseDown);
             // 
             // webBrowser
             // 
@@ -424,6 +399,7 @@ namespace autoprintlis
             this.panelControl3.Name = "panelControl3";
             this.panelControl3.Size = new System.Drawing.Size(590, 667);
             this.panelControl3.TabIndex = 16;
+            this.panelControl3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Start_MouseDown);
             // 
             // labelControl2
             // 
@@ -476,6 +452,7 @@ namespace autoprintlis
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Start_MouseDown);
             // 
             // panelControl5
             // 
@@ -485,6 +462,7 @@ namespace autoprintlis
             this.panelControl5.Name = "panelControl5";
             this.panelControl5.Size = new System.Drawing.Size(588, 130);
             this.panelControl5.TabIndex = 0;
+            this.panelControl5.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Start_MouseDown);
             // 
             // labelControl1
             // 
@@ -558,7 +536,7 @@ namespace autoprintlis
             this.notifyIcon.Visible = true;
             this.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseDoubleClick);
             // 
-            // frmmain
+            // frmmainLis
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -571,9 +549,9 @@ namespace autoprintlis
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.Name = "frmmain";
+            this.MinimizeBox = false;
+            this.Name = "frmmainLis";
             this.Text = "frmmain";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.frmmain_Load);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.frmmain_KeyPress);
             this.Controls.SetChildIndex(this.barDockControlTop, 0);
@@ -647,8 +625,6 @@ namespace autoprintlis
         private DevExpress.XtraEditors.LabelControl lblName;
         private System.Windows.Forms.NotifyIcon notifyIcon;
         private DevExpress.XtraEditors.LabelControl lblTipNum;
-        private DevExpress.XtraEditors.LabelControl lblIng2;
-        private DevExpress.XtraEditors.LabelControl lblIngNum;
         private DevExpress.XtraEditors.LabelControl lblTip2;
         private DevExpress.XtraEditors.LabelControl lblTip1;
         private DevExpress.XtraEditors.LabelControl lblComplete;

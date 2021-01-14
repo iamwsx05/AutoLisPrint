@@ -35,24 +35,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\..\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="comm.control, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -94,7 +76,7 @@
     </Reference>
     <Reference Include="LIS_GUI, Version=2.0.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Debug\LIS_GUI.dll</HintPath>
+      <HintPath>..\..\..\Debug\LIS_GUI.dll</HintPath>
     </Reference>
     <Reference Include="MiddleTierBase, Version=2.0.0.1, Culture=neutral, PublicKeyToken=bcb959104966b6d1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -153,11 +135,17 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmmain.cs">
+    <Compile Include="frmmainSelf.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmmain.Designer.cs">
-      <DependentUpon>frmmain.cs</DependentUpon>
+    <Compile Include="frmmainSelf.Designer.cs">
+      <DependentUpon>frmmainSelf.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmmainLis.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmmainLis.Designer.cs">
+      <DependentUpon>frmmainLis.cs</DependentUpon>
     </Compile>
     <Compile Include="frmShowMessage.cs">
       <SubType>Form</SubType>
@@ -171,8 +159,11 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmmain.resx">
-      <DependentUpon>frmmain.cs</DependentUpon>
+    <EmbeddedResource Include="frmmainSelf.resx">
+      <DependentUpon>frmmainSelf.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmmainLis.resx">
+      <DependentUpon>frmmainLis.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmShowMessage.resx">
       <DependentUpon>frmShowMessage.cs</DependentUpon>
@@ -201,9 +192,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\cs.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

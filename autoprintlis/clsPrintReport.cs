@@ -122,14 +122,13 @@ namespace autoprintlis
             }
             catch (Exception ex)
             {
-                //new clsLogText().LogError(ex.Message);
                 ExceptionLog.OutPutException("m_mthGetPrintContentFromDB-->"+ex);
             }
         }
 
         private void m_mthSetPrintTool(string p_strParmValue)
         {
-            this.m_objPrintTool = clsPrintToolFactory.Create(this.m_strReportGroupID);
+            this.m_objPrintTool = clsPrintToolFactory.Create(this.m_strReportGroupID);   
         }
 
         private void m_printDoc_BeginPrint(object sender, System.Drawing.Printing.PrintEventArgs e)
@@ -138,7 +137,7 @@ namespace autoprintlis
 			{
 				this.m_objPrintTool.m_mthInitPrintTool(this.m_printDoc);
 				this.m_objPrintTool.m_mthBeginPrint(this.m_ObjPrintInfo);
-			}
+            }
 		}
 
 		private void m_printDoc_PrintPage(object sender, PrintPageEventArgs e)
@@ -219,18 +218,11 @@ namespace autoprintlis
 						this.m_printDoc.PrinterSettings.PrinterName = printerName;
 					}
 
-                    //this.m_printDlg = new PrintDialog();
-                    //this.m_printDlg.Document = this.m_printDoc;
-                    //DialogResult dialogResult = this.m_printDlg.ShowDialog();
-                    //if (dialogResult == DialogResult.OK)
-                    //{
-						this.m_printDoc.Print();
-                    //}
+				    this.m_printDoc.Print();
 				}
 			}
 			catch(Exception e)
 			{
-                //MessageBox.Show(e.ToString());
                 ExceptionLog.OutPutException("m_mthPrint-->"+e);
 			}
 		}
@@ -339,7 +331,6 @@ namespace autoprintlis
 					}
 					catch (Exception ex)
 					{
-                        //MessageBox.Show(ex.ToString());
                         ExceptionLog.OutPutException("m_mthLoadDWReport-->"+ex);
 					}
 					finally

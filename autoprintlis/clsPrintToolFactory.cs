@@ -9,51 +9,57 @@ namespace autoprintlis
 {
     internal class clsPrintToolFactory
     {
-        public static infPrintRecord Create(string reportGroupId)
+        public static infPrintRecord Create(string reportGroupId )
         {
-            infPrintRecord result = null;
-            if (reportGroupId != null)
+            infPrintRecord printTool = null;
+            switch (reportGroupId)
             {
-                if (reportGroupId == "000001")
-                {
-                    result = new clsMarrowReportPrintTool();
+                case "000001":
+                    printTool = new clsMarrowReportPrintTool();
                     clsMarrowReportPrintTool.blnSurePrintDiagnose = true;
-                    return result;
-                }
-                if (reportGroupId == "000002")
-                {
-                    result = new clsGermReportPrinTool();
+                    break;
+                case "000002":
+                    printTool = new clsGermReportPrinTool();
                     clsGermReportPrinTool.blnSurePrintDiagnose = true;
-                    return result;
-                }
-                if (reportGroupId == "000004")
-                {
-                    result = new clsGermReportPrinToolV2();
+                    break;
+                case "000004":
+                    printTool = new clsGermReportPrinToolV2();
                     clsGermReportPrinToolV2.blnSurePrintDiagnose = true;
-                    return result;
-                }
-            }
-            string text = null;
-            long num = clsPrintToolFactory.m_lngGetCollocate(out text, "4003");
-            if (num > 0L)
-            {
-                if (text != "")
-                {
-                    string text2 = text;
-                    if (text2 != null)
+                    break;
+                default:
+                    string strFlag = null;
+                    //4003:检验报告格式  0:默认格式 1:格式一 2:格式二
+                    long lngRes = m_lngGetCollocate(out strFlag, "4003");
+                    if (lngRes > 0)
                     {
-                        if (text2 == "0")
+                        if (strFlag != "")
                         {
-                            result = new clsUnifyReportPrint();
-                            clsUnifyReportPrint.blnSurePrintDiagnose = true;
-                            return result;
+                            switch (strFlag)
+                            {
+                                case "0":
+                                    printTool = new clsUnifyReportPrint();
+                                    clsUnifyReportPrint.blnSurePrintDiagnose = true;
+
+                                    break;
+                                //case "1":
+                                //    printTool = new clsUnifyReportPrintForChildHospital();
+                                //    clsUnifyReportPrintForChildHospital.blnSurePrintDiagnose = true;
+                                //    break;
+                                //case "2":
+                                //    printTool = new clsUnifyReportPrintForChildHospital_B5();
+                                //    clsUnifyReportPrintForChildHospital_B5.blnSurePrintDiagnose = true;
+                                //    break;
+                                default:
+                                    printTool = new clsUnifyReportPrint();
+                                    clsUnifyReportPrint.blnSurePrintDiagnose = true;
+                                    break;
+                            }
                         }
                     }
-                    result = new clsUnifyReportPrint();
-                    clsUnifyReportPrint.blnSurePrintDiagnose = true;
-                }
+                    break;
             }
-            return result;
+
+            return printTool;
         }
         public static long m_lngGetCollocate(out string p_strFlag, string p_strSetID)
         {

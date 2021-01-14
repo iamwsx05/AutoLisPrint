@@ -19,9 +19,9 @@ using System.Xml;
 
 namespace autoprintlis
 {
-    public partial class frmmain : frmBase
+    public partial class frmmainSelf : frmBase
     {
-        public frmmain()
+        public frmmainSelf()
         {
             InitializeComponent();
         }
@@ -123,6 +123,11 @@ namespace autoprintlis
             {
                 this.Close();
             }
+
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                QueryAndPrint();
+            }
         }
 
         #endregion
@@ -141,6 +146,10 @@ namespace autoprintlis
             if (e.KeyChar == (char)Keys.Escape)
             {
                 this.Close();
+            }
+            if(e.KeyChar == (char)Keys.Enter)
+            {
+                QueryAndPrint();
             }
         }
         #endregion
@@ -178,12 +187,12 @@ namespace autoprintlis
             this.btnClear.Click += new System.EventHandler(this.btn_Click);
             this.txtCard.Focus();
             this.lblName.Text = string.Empty;
-            this.lblIngNum.Text = string.Empty;
+           // this.lblIngNum.Text = string.Empty;
             this.lblTipNum.Text = string.Empty;
             this.lblTip2.Visible = false;
             this.lblTip1.Visible = false;
             this.lblIng1.Visible = false;
-            this.lblIng2.Visible = false;
+            //this.lblIng2.Visible = false;
             waitTime = Function.Int(ReadXmlConfig("WaitTime"));
             string path = Application.StartupPath + "\\guid.jpg";
             if (File.Exists(path))
@@ -201,11 +210,11 @@ namespace autoprintlis
 
         private void printCompleted()
         {
-            this.lblIngNum.Text = string.Empty;
+            //this.lblIngNum.Text = string.Empty;
             this.lblTipNum.Text = string.Empty;
             this.lblName.Text = string.Empty;
             this.lblIng1.Visible = false;
-            this.lblIng2.Visible = false;
+            //this.lblIng2.Visible = false;
             this.lblTip1.Visible = false;
             this.lblTip2.Visible = false;
             this.lblComplete.Text = string.Empty;
@@ -230,7 +239,7 @@ namespace autoprintlis
         private void printInit()
         {
             this.lblIng1.Visible = true;
-            this.lblIng2.Visible = true;
+            //this.lblIng2.Visible = true;
             this.lblTip1.Visible = true;
             this.lblTip2.Visible = true;
             this.lblComplete.Text = string.Empty;
@@ -278,7 +287,7 @@ namespace autoprintlis
                 }
                 else
                 {
-                    this.lblIngNum.Text = messageStr;
+                    //this.lblIngNum.Text = messageStr;
                 }
             }
         }
@@ -338,8 +347,18 @@ namespace autoprintlis
                     {
                         printInit();
                         int Ii = 0;
-                        string tip1 = patName + "," +unPrinted.ToString() ;
+                       
+                        int page = 0;
+                        foreach (entityLisInfo var in data)
+                        {
+                            if (string.IsNullOrEmpty(var.printeded) || var.printeded == "0")
+                            {
+                                page += GetPrintPage(var.rptGroupId, var.applicationId);
+                            }
+                        }
+                        string tip1 = patName + "," + page.ToString();
                         messageShow(1, tip1);
+
                         foreach (entityLisInfo var in data)
                         {
                             if (string.IsNullOrEmpty(var.printeded) || var.printeded == "0")
@@ -348,14 +367,14 @@ namespace autoprintlis
                                 this.Print(var.rptGroupId, var.applicationId);
                                 Delay(waitTime);
                             }
-                            if (string.IsNullOrEmpty(var.checkContent))
-                            {
-                                if (var.checkContent.Contains("性激素6项") && var.checkContent.Contains("绒毛膜促性腺激素定量"))
-                                {
-                                    messageShow(2, (++Ii).ToString());
-                                    Delay(waitTime);
-                                }
-                            }
+                            //if (string.IsNullOrEmpty(var.checkContent))
+                            //{
+                            //    if (var.checkContent.Contains("性激素6项") && var.checkContent.Contains("绒毛膜促性腺激素定量"))
+                            //    {
+                            //        messageShow(2, (++Ii).ToString());
+                            //        Delay(waitTime);
+                            //    }
+                            //}
                         }
                         printCompleted();
                         messageShow(3, "您的报告已全部打印。");
@@ -391,6 +410,33 @@ namespace autoprintlis
                 clsPrintReport.m_mthGetPrintContentFromDB(reportGroupID, applicationId, true);
                 clsPrintReport.m_mthPrint();
             }
+        }
+
+        internal int GetPrintPage(string reportGroupID, string applicationId)
+        {
+            int page = 0;
+            List<string> list = new List<string>();
+            clsPrintReport clsPrintReport = new clsPrintReport();
+
+            if (list.IndexOf(reportGroupID + applicationId) < 0)
+            {
+                list.Add(reportGroupID + applicationId);
+                clsPrintReport.m_mthGetPrintContentFromDB(reportGroupID, applicationId, true);
+                DataTable m_dtbResult = clsPrintReport.m_ObjPrintInfo.m_dtbResult;
+                DataTable m_dtbSample = clsPrintReport.m_ObjPrintInfo.m_dtbBaseInfo;
+                clsUnifyReportPrint printReport = new clsUnifyReportPrint();
+                float p_fltX = 41.3500023F;
+                float p_fltY = 127.796875F;
+                float p_fltWidth = 744.3F;
+                float p_fltHeight = 360.203125F;
+                float p_fltMaxHeight = 360.203125F;
+                printReport.m_dtbSample = m_dtbSample;
+                printReport.m_mthInitalPrintTool();
+                clsPrintPerPageInfo[] m_objPrintPage = printReport.m_objConstructPrintPageInfoGetPage(m_dtbResult,  p_fltX,  p_fltY,  p_fltWidth,  p_fltHeight,  p_fltMaxHeight);
+                page = m_objPrintPage.Length;
+            }
+
+            return page;
         }
         #endregion
 

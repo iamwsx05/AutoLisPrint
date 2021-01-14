@@ -5,6 +5,7 @@ using com.digitalwave.Utility;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -73,7 +74,7 @@ namespace autoprintlis
                     param[2].Value = ipNo;
                 }
 
-                dt = svc.GetDataTable(Sql,param);
+                dt = svc.GetDataTable(Sql, param);
 
                 if (dt != null && dt.Rows.Count > 0)
                 {
@@ -102,7 +103,7 @@ namespace autoprintlis
                             data.Add(vo);
                             for (int i = 0; i < data.FindAll(t => t.cardNo == vo.cardNo).Count; i++)
                             {
-                                int j = data.FindIndex(t => t.cardNo == vo.cardNo)+i;
+                                int j = data.FindIndex(t => t.cardNo == vo.cardNo) + i;
                                 data[j].n++;
                             }
                         }
@@ -111,12 +112,12 @@ namespace autoprintlis
             }
             catch (Exception objEx)
             {
-                ExceptionLog.OutPutException("QueryAreaReport-->"+objEx);
+                ExceptionLog.OutPutException("QueryAreaReport-->" + objEx);
             }
             return data;
         }
         #endregion
-        
+
         #region  QueryReport
         /// <summary>
         /// 
@@ -125,7 +126,7 @@ namespace autoprintlis
         /// <param name="endDate"></param>
         /// <param name="ipNo"></param>
         /// <returns></returns>
-        public List<entityLisInfo> QueryReport(string startDate, string endDate, string cardNo,ref int printed,ref int unPrinted)
+        public List<entityLisInfo> QueryReport(string startDate, string endDate, string cardNo, ref int printed, ref int unPrinted)
         {
             string Sql = string.Empty;
             DataTable dt = null;
@@ -170,14 +171,14 @@ namespace autoprintlis
                                     and to_date(?,'yyyy-mm-dd hh24:mi:ss')
                                 order by s.application_id_chr  ";
 
-             
+
                 IDataParameter[] param = null;
 
                 param = svc.CreateParm(3);
                 param[0].Value = cardNo;
                 param[1].Value = startDate + " 00:00:00"; ;
                 param[2].Value = endDate + " 23:59:59";
-                
+
                 dt = svc.GetDataTable(Sql, param);
 
                 #region 赋值
@@ -209,7 +210,7 @@ namespace autoprintlis
                                 vo1.printeded = "1";
                                 data.Add(vo1);
                             }
-                            else 
+                            else
                             {
                                 vo.checkContent = string.Empty;
                             }
@@ -218,7 +219,7 @@ namespace autoprintlis
                             printed++;
 
                         vo.n = ++n;
-                        data.Add(vo);                   
+                        data.Add(vo);
                     }
                 }
                 #endregion
@@ -244,8 +245,8 @@ namespace autoprintlis
 
             param = svc.CreateParm(1);
             param[0].Value = p_strApplicationID;
-            DataTable dataTable = null ;
-            dataTable = svc.GetDataTable(Sql,param);
+            DataTable dataTable = null;
+            dataTable = svc.GetDataTable(Sql, param);
 
             if (dataTable != null && dataTable.Rows.Count > 0)
             {
@@ -262,7 +263,7 @@ namespace autoprintlis
         {
             p_dtbReportInfo = null;
             long result = -1;
-            
+
             SqlHelper svc = null;
             svc = new SqlHelper(EnumBiz.onlineDB);
 
@@ -382,7 +383,7 @@ namespace autoprintlis
                 param = svc.CreateParm(2);
                 param[0].Value = p_strApplicationID;
                 param[1].Value = p_strReportGroupID;
-                p_dtbCheckResult = svc.GetDataTable(Sql,param);
+                p_dtbCheckResult = svc.GetDataTable(Sql, param);
 
                 if (p_dtbCheckResult != null && p_dtbCheckResult.Rows.Count > 0)
                 {
@@ -393,7 +394,7 @@ namespace autoprintlis
                     param2[0].Value = value;
                     param2[1].Value = value2;
                     p_dtbCheckResult = null;
-                    p_dtbCheckResult = svc.GetDataTable(Sql2,param2);
+                    p_dtbCheckResult = svc.GetDataTable(Sql2, param2);
                 }
             }
             catch (Exception objEx)
@@ -427,7 +428,7 @@ namespace autoprintlis
             }
             catch (Exception objEx)
             {
-                ExceptionLog.OutPutException("m_lngUpdatePrinctTime-->"+objEx);
+                ExceptionLog.OutPutException("m_lngUpdatePrinctTime-->" + objEx);
             }
             finally
             {
@@ -440,7 +441,7 @@ namespace autoprintlis
         {
             long result = 0;
             strFlag = "";
-            
+
             string strSQLCommand = "select SETSTATUS_INT from t_sys_setting where  setid_chr='" + strsetid + "'";
             DataTable dataTable = new DataTable();
             try
@@ -473,7 +474,7 @@ namespace autoprintlis
                 param[0].Value = setid;
                 string Sql = "select setstatus_int from t_sys_setting where setid_chr = ?";
                 DataTable dataTable = new DataTable();
-                dataTable = svc.GetDataTable(Sql,param);
+                dataTable = svc.GetDataTable(Sql, param);
                 if (dataTable.Rows.Count == 1)
                 {
                     result = Convert.ToInt32(dataTable.Rows[0][0].ToString());
@@ -505,7 +506,7 @@ namespace autoprintlis
             }
             catch (Exception ex)
             {
-                ExceptionLog.OutPutException("m_strGetSysparm-->"+ex);
+                ExceptionLog.OutPutException("m_strGetSysparm-->" + ex);
             }
             return result;
         }
@@ -516,7 +517,7 @@ namespace autoprintlis
             long num = 0L;
             DataTable dtbBaseInfo = null;
             DataTable dtbResult = null;
-            
+
             num = m_lngGetReportInfoByReportGroupIDAndApplicationID(null, p_strReportGroupID, p_strApplID, p_blnConfirmed, out dtbBaseInfo);
             if (num > 0L)
             {
@@ -591,5 +592,91 @@ namespace autoprintlis
             return list;
         }
 
+        public List<EntityAidRemark> GetAidRemark()
+        {
+            List<EntityAidRemark> lstAidRemark = null;
+            string Sql = @"select appunitid, appunitname, sex, highorlow, remarkinfo, keyword,appunitGroup,checkItemId from t_aid_lis_report_remark";
+            SqlHelper svc = new SqlHelper(EnumBiz.onlineDB);
+            DataTable dt = svc.GetDataTable(Sql);
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                lstAidRemark = new List<EntityAidRemark>();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    lstAidRemark.Add(new EntityAidRemark()
+                    {
+                        appUnitId = dr["appunitid"].ToString(),
+                        appUnitName = dr["appunitname"].ToString(),
+                        sex = Function.Int(dr["sex"].ToString()),
+                        highOrLow = Function.Int(dr["highorlow"].ToString()),
+                        remarkInfo = dr["remarkinfo"].ToString(),
+                        keyWord = dr["keyword"].ToString(),
+                        appunitgroup = Function.Int(dr["appunitGroup"].ToString()),
+                        checkItemId = dr["checkItemId"].ToString()
+                    });
+                }
+            }
+            return lstAidRemark;
+        }
+
+        public string GetIdCardNo(string patientId)
+        {
+            string cardNo = string.Empty;
+            string Sql = @"select idcard_chr from t_bse_patient a where a.patientid_chr = '" + patientId + "'";
+            SqlHelper svc = new SqlHelper(EnumBiz.onlineDB);
+            DataTable dt = svc.GetDataTable(Sql);
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                cardNo = dt.Rows[0]["idcard_chr"].ToString();
+            }
+
+            return cardNo;
+        }
+
+        #region Mejer 尿沉渣报告图片
+        /// <summary>
+        /// Mejer 尿沉渣报告图片
+        /// </summary>
+        /// <param name="appId"></param>
+        /// <returns></returns>
+        public Image GetMejerImage(string appId,string mejerParm)
+        {
+            Image img = null;
+            string Sql = @"SELECT DISTINCT  t2.deviceid_chr,t2.device_sampleid_chr,t2.check_dat
+                FROM t_opr_lis_app_sample t1
+                 left join t_opr_lis_device_relation t2
+                 on t1.sample_id_chr = t2.sample_id_chr
+                WHERE t2.status_int > 0
+                AND t1.application_id_chr = '{0}' and t2.deviceid_chr= '{1}'";
+            Sql = string.Format(Sql, appId, mejerParm);
+            DataTable dt = null;
+            SqlHelper svc = new SqlHelper(EnumBiz.onlineDB);
+            dt = svc.GetDataTable(Sql);
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                string deviceId = dt.Rows[0]["deviceid_chr"].ToString();
+                string devSampleId = dt.Rows[0]["device_sampleid_chr"].ToString().Trim();
+                string checkDate = Function.Datetime(dt.Rows[0]["check_dat"]).ToString("yyyy-MM-dd HH:mm:ss");
+
+                if (!string.IsNullOrEmpty(deviceId) && !string.IsNullOrEmpty(devSampleId) && !string.IsNullOrEmpty(checkDate))
+                {
+                    Sql = @"select a.sampleimg from t_checkresult_img a 
+                                    where a.deviceid = '{0}' 
+                                            and a.sampleid = '{1}' 
+                                            and a.checkdate = to_date('{2}','yyyy-mm-dd hh24:mi:ss') ";
+
+                    Sql = string.Format(Sql, deviceId, devSampleId, checkDate);
+
+                    dt = svc.GetDataTable(Sql);
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        byte[] bytGraph = (byte[])dt.Rows[0]["sampleimg"];
+                        img = Function.ConvertByteToImage(bytGraph);
+                    }
+                }
+            }
+            return img;
+        }
+        #endregion
     }
 }
